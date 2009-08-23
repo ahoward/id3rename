@@ -77,6 +77,8 @@ task :gemspec do
 
             spec.has_rdoc = #{ has_rdoc.inspect }
             spec.test_files = #{ test_files.inspect }
+            spec.add_dependency 'main'
+            spec.add_dependency 'ruby-mp3info'
             #spec.add_dependency 'lib', '>= version'
             #spec.add_dependency 'fattr'
 

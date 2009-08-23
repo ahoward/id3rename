@@ -3,7 +3,7 @@
 
 Gem::Specification::new do |spec|
   spec.name = "id3rename"
-  spec.version = "1.0.2"
+  spec.version = "1.0.4"
   spec.platform = Gem::Platform::RUBY
   spec.summary = "id3rename"
 
@@ -14,6 +14,8 @@ Gem::Specification::new do |spec|
 
   spec.has_rdoc = true
   spec.test_files = nil
+  spec.add_dependency 'main'
+  spec.add_dependency 'ruby-mp3info'
   #spec.add_dependency 'lib', '>= version'
   #spec.add_dependency 'fattr'
 

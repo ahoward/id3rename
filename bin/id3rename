@@ -7,7 +7,7 @@ require 'main'    # sudo gem install main
 require 'mp3info' # sudo gem install ruby-mp3info
 
 Main {
-  Version = '1.0.3'
+  Version = '1.0.4'
 
   description <<-__
     id3rename is a program to do simple renaming of mp3 files
