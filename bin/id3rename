@@ -1,0 +1,101 @@
+#! /usr/bin/env ruby
+
+require 'pathname'
+
+require 'rubygems'
+require 'main'    # sudo gem install main
+require 'mp3info' # sudo gem install ruby-mp3info
+
+Main {
+  Version = '1.0.0'
+
+  description <<-__
+    id3rename is a program to do simple renaming of mp3 files
+  __
+
+  examples <<-__
+    . id3rename badly-named.mp3
+    . id3rename badly-named.mp3 another-badly-named.mp3
+    . id3rename directory/full/of/badly-named.mp3 directory/full/of/another-badly-named.mp3
+  __
+
+  argument('paths'){
+    arity -1
+  }
+
+  option('--noop', '-n'){
+    description 'do no work, simply show what would be done'
+  }
+
+  option('--version'){
+    description 'print version and exit'
+  }
+
+  def run
+    if params['version'].given?
+      puts Version
+      exit
+    end
+    @paths = params['paths'].values
+    @noop = params['noop'].given?
+    finding_files_in(*@paths) do |file|
+      id3rename(file)
+    end
+  end
+
+  def id3rename(path)
+    src = path
+    dst = renamed(path)
+    unless src==dst
+      y src => dst
+      unless @noop
+        File.rename src, dst
+      end
+    end
+  end
+
+  def finding_files_in(*paths, &block)
+    paths.flatten!
+    paths.compact!
+    paths.map! do |path|
+      path = File.expand_path(path)
+      test(?f, path) ? path : Dir[ File.join(path, '**', '**') ]
+    end
+    paths.flatten!
+    paths.map!{|path| Pathname.new(path).realpath.to_s}
+    paths.sort!
+    paths.uniq!
+    @seen = {}
+    paths.each do |path|
+      next if @seen[path]
+      @seen[path] = true
+      block.call(path) if(test(?f, path) and path =~ %r/\.mp3$/)
+    end
+  end
+
+  def renamed(path)
+    dirname, basename = File.split File.expand_path(path)
+    ext = basename.split(%r/\./).last
+    parts =
+      Mp3Info.open(path) do |mp3|
+        [
+          mp3.tag.artist,
+          #mp3.tag.album,
+          #mp3.tag.tracknum,
+          mp3.tag.title,
+        ]
+      end
+    parts.compact!
+    parts.delete_if{|part| part.empty?}
+    basename = parts.map{|part| slug_for(part)}.join('_') + '.' + ext
+    File.join(dirname, basename)
+  end
+
+  def slug_for(*args)
+    string = args.flatten.compact.join('-')
+    words = string.to_s.scan(%r/\w+/)
+    words.map!{|word| word.gsub %r/[^0-9a-zA-Z_-]/, ''}
+    words.delete_if{|word| word.nil? or word.strip.empty?}
+    words.join('-').downcase
+  end
+}

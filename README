@@ -1,0 +1,20 @@
+NAME
+  id3rename
+
+SYNOPSIS
+  id3rename paths paths* [options]+
+
+DESCRIPTION
+  id3rename is a program to do simple renaming of mp3 files
+
+PARAMETERS
+  paths (-2 -> paths) 
+  --noop, -n 
+      do no work, simply show what would be done 
+  --help, -h 
+
+EXAMPLES
+  . id3rename badly-named.mp3
+  . id3rename badly-named.mp3 another-badly-named.mp3
+  . id3rename directory/full/of/badly-named.mp3 directory/full/of/another-badly-named.mp3
+
