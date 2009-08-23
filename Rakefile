@@ -71,7 +71,9 @@ task :gemspec do
             spec.files = #{ files.inspect }
             spec.executables = #{ executables.inspect }
             
+            <% if test(?d, 'lib') %>
             spec.require_path = "lib"
+            <% end %>
 
             spec.has_rdoc = #{ has_rdoc.inspect }
             spec.test_files = #{ test_files.inspect }

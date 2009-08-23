@@ -3,14 +3,14 @@
 
 Gem::Specification::new do |spec|
   spec.name = "id3rename"
-  spec.version = "1.0.0"
+  spec.version = "1.0.2"
   spec.platform = Gem::Platform::RUBY
   spec.summary = "id3rename"
 
   spec.files = ["bin", "bin/id3rename", "id3rename.gemspec", "Rakefile", "README"]
   spec.executables = ["id3rename"]
   
-  spec.require_path = "lib"
+  
 
   spec.has_rdoc = true
   spec.test_files = nil
